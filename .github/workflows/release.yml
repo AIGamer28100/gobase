@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.23.x'
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Build binaries
+      run: |
+        # Build for multiple platforms
+        GOOS=linux GOARCH=amd64 go build -o gobase-linux-amd64 ./cmd/gobase
+        GOOS=linux GOARCH=arm64 go build -o gobase-linux-arm64 ./cmd/gobase
+        GOOS=windows GOARCH=amd64 go build -o gobase-windows-amd64.exe ./cmd/gobase
+        GOOS=darwin GOARCH=amd64 go build -o gobase-darwin-amd64 ./cmd/gobase
+        GOOS=darwin GOARCH=arm64 go build -o gobase-darwin-arm64 ./cmd/gobase
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          gobase-linux-amd64
+          gobase-linux-arm64
+          gobase-windows-amd64.exe
+          gobase-darwin-amd64
+          gobase-darwin-arm64
+        generate_release_notes: true
+        draft: false
+        prerelease: false
