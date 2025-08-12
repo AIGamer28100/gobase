@@ -37,7 +37,7 @@ type Connection struct {
 
 // GetDB returns the underlying database connection
 func (c *Connection) GetDB() interface{} {
-	if c.Type == "mongodb" {
+	if c.Type == mongoDBType {
 		return c.MongoDB
 	}
 	return c.GormDB
@@ -45,7 +45,7 @@ func (c *Connection) GetDB() interface{} {
 
 // Close closes the database connection
 func (c *Connection) Close() error {
-	if c.Type == "mongodb" && c.MongoClient != nil {
+	if c.Type == mongoDBType && c.MongoClient != nil {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		return c.MongoClient.Disconnect(ctx)
@@ -109,7 +109,7 @@ func LoadConfig() (*DatabaseConfig, error) {
 	case "sqlite":
 		// For SQLite, DB_NAME is the file path
 		// No other fields are required
-	case "mongodb":
+	case mongoDBType:
 		if config.Host == "" {
 			config.Host = "localhost"
 		}
@@ -142,7 +142,7 @@ func InitDBWithConfig(config *DatabaseConfig) (*Connection, error) {
 		return initPostgreSQL(config)
 	case "sqlite":
 		return initSQLite(config)
-	case "mongodb":
+	case mongoDBType:
 		return initMongoDB(config)
 	default:
 		return nil, fmt.Errorf("unsupported database type: %s", config.Type)
@@ -206,7 +206,7 @@ func initMongoDB(config *DatabaseConfig) (*Connection, error) {
 	database := client.Database(config.Name)
 
 	return &Connection{
-		Type:        "mongodb",
+		Type:        mongoDBType,
 		MongoDB:     database,
 		MongoClient: client,
 	}, nil

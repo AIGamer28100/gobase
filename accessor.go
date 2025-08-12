@@ -233,14 +233,28 @@ func (a *Accessor) Preload(modelRegistry map[string]interface{}, jsonFilePaths .
 
 // preloadFromFile loads data from a single JSON file
 func (a *Accessor) preloadFromFile(modelRegistry map[string]interface{}, filePath string) error {
+	// Security: Validate file path to prevent directory traversal
+	cleanPath := filepath.Clean(filePath)
+	if filepath.IsAbs(cleanPath) {
+		// For absolute paths, ensure they don't contain directory traversal patterns
+		if strings.Contains(cleanPath, "..") {
+			return fmt.Errorf("invalid file path: directory traversal not allowed")
+		}
+	} else {
+		// For relative paths, ensure they don't escape the current directory
+		if strings.Contains(cleanPath, "..") || strings.HasPrefix(cleanPath, "/") {
+			return fmt.Errorf("invalid file path: directory traversal not allowed")
+		}
+	}
+
 	// Read the JSON file
-	data, err := os.ReadFile(filePath)
+	data, err := os.ReadFile(cleanPath)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
 
 	// Determine model type from filename
-	filename := filepath.Base(filePath)
+	filename := filepath.Base(cleanPath)
 	modelName := strings.TrimSuffix(filename, filepath.Ext(filename))
 
 	// Find the model type in the registry
