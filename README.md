@@ -4,8 +4,8 @@ GoBase is a powerful, Django-inspired ORM library for Go that provides elegant d
 
 [![go report card](https://goreportcard.com/badge/github.com/AIGamer28100/gobase "go report card")](https://goreportcard.com/report/github.com/AIGamer28100/gobase)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-<!-- [![test status](https://github.com/AIGamer28100/gobase/workflows/tests/badge.svg?branch=main "test status")](https://github.com/AIGamer28100/gobase/actions) -->
-<!-- [![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/gorm.io/gorm?tab=doc) -->
+[![Tests](https://github.com/AIGamer28100/gobase/workflows/Tests/badge.svg?branch=main "test status")](https://github.com/AIGamer28100/gobase/actions)
+[![Go Reference](https://pkg.go.dev/badge/github.com/AIGamer28100/gobase.svg)](https://pkg.go.dev/github.com/AIGamer28100/gobase)
 
 ## Features
 
@@ -238,6 +238,72 @@ go test -v
 - **SQLite**: Default, perfect for development and small applications
 - **PostgreSQL**: Production-ready relational database
 - **MongoDB**: Document database support (coming soon)
+
+## Development
+
+### Setup Development Environment
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AIGamer28100/gobase.git
+cd gobase
+```
+
+2. Install development dependencies:
+```bash
+go mod download
+```
+
+3. Install Git hooks for code quality (recommended):
+```bash
+make install-hooks
+```
+
+The Git hooks will automatically run before each commit to ensure:
+- ✅ Go modules are in sync
+- ✅ Code passes `go vet`
+- ✅ All tests pass
+- ✅ Code passes linting (golangci-lint)
+- ✅ Code passes security scan (gosec)
+- ✅ No binary files are committed
+- ✅ Code is properly formatted
+
+### Development Commands
+
+```bash
+# Build the project
+make build
+
+# Run tests
+make test
+
+# Run linter
+make lint
+
+# Run security scan
+make security
+
+# Run all checks (like CI)
+make test lint security
+
+# Install Git hooks
+make install-hooks
+
+# Clean build artifacts
+make clean
+```
+
+### Manual Hook Installation
+
+If you prefer to install hooks manually:
+```bash
+./scripts/install-hooks.sh
+```
+
+To bypass hooks for a commit (not recommended):
+```bash
+git commit --no-verify
+```
 
 ## Contributing
 
