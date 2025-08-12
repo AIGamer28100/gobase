@@ -2,7 +2,7 @@ package main
 
 // Version information for GoBase CLI
 var (
-	Version     = "v0.0.1-alpha"
+	Version     = "v0.0.2"
 	Name        = "GoBase CLI"
 	Description = "A Django-inspired ORM and database toolkit for Go"
 	BuildDate   = "unknown"
