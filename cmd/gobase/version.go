@@ -13,11 +13,3 @@ var (
 func getVersionInfo() string {
 	return Name + " " + Version + "\n" + Description
 }
-
-// getFullVersionInfo returns detailed version information
-func getFullVersionInfo() string {
-	return Name + " " + Version + "\n" +
-		Description + "\n" +
-		"Build Date: " + BuildDate + "\n" +
-		"Git Commit: " + GitCommit
-}

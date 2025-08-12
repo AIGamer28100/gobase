@@ -185,7 +185,7 @@ func promptInput(prompt string) string {
 
 func promptPassword(prompt string) string {
 	fmt.Print(prompt)
-	bytePassword, err := term.ReadPassword(int(syscall.Stdin))
+	bytePassword, err := term.ReadPassword(syscall.Stdin)
 	if err != nil {
 		log.Fatalf("Failed to read password: %v", err)
 	}

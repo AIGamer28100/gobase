@@ -4,12 +4,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 
 	"gorm.io/gorm"
+)
+
+const (
+	mongoDBType = "mongodb"
 )
 
 // Accessor implements both ModelAccessor and MigrationProvider interfaces.
@@ -41,7 +45,7 @@ func (a *Accessor) Create(model interface{}) error {
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Create operation")
 	}
 
@@ -61,7 +65,7 @@ func (a *Accessor) Get(model interface{}, id interface{}) error {
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Get operation")
 	}
 
@@ -97,7 +101,7 @@ func (a *Accessor) All(models interface{}) error {
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for All operation")
 	}
 
@@ -111,7 +115,7 @@ func (a *Accessor) Filter(models interface{}, conditions map[string]interface{})
 		return errors.New("models cannot be nil")
 	}
 
-	if conditions == nil || len(conditions) == 0 {
+	if len(conditions) == 0 {
 		return a.All(models)
 	}
 
@@ -122,7 +126,7 @@ func (a *Accessor) Filter(models interface{}, conditions map[string]interface{})
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Filter operation")
 	}
 
@@ -144,7 +148,7 @@ func (a *Accessor) Update(model interface{}) error {
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Update operation")
 	}
 
@@ -161,7 +165,7 @@ func (a *Accessor) Delete(model interface{}) error {
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Delete operation")
 	}
 
@@ -176,7 +180,7 @@ func (a *Accessor) Delete(model interface{}) error {
 // The default User model is only migrated if explicitly used or passed as an argument.
 func (a *Accessor) Migrate(models ...interface{}) error {
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Migrate operation")
 	}
 
@@ -230,7 +234,7 @@ func (a *Accessor) Preload(modelRegistry map[string]interface{}, jsonFilePaths .
 // preloadFromFile loads data from a single JSON file
 func (a *Accessor) preloadFromFile(modelRegistry map[string]interface{}, filePath string) error {
 	// Read the JSON file
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
@@ -349,7 +353,7 @@ func (a *Accessor) FindWhere(models interface{}, condition string, args ...inter
 	}
 
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for FindWhere operation")
 	}
 
@@ -360,7 +364,7 @@ func (a *Accessor) FindWhere(models interface{}, condition string, args ...inter
 // Count returns the number of records matching the given conditions.
 func (a *Accessor) Count(model interface{}, condition string, args ...interface{}) (int64, error) {
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return 0, errors.New("MongoDB support not yet implemented for Count operation")
 	}
 
@@ -373,7 +377,7 @@ func (a *Accessor) Count(model interface{}, condition string, args ...interface{
 // This follows the Single Responsibility Principle by handling only transaction management.
 func (a *Accessor) Transaction(fn func(*Accessor) error) error {
 	// Only support GORM for now (SQLite/PostgreSQL)
-	if a.connection.Type == "mongodb" {
+	if a.connection.Type == mongoDBType {
 		return errors.New("MongoDB support not yet implemented for Transaction operation")
 	}
 

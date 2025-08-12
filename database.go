@@ -157,7 +157,6 @@ func initPostgreSQL(config *DatabaseConfig) (*Connection, error) {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to PostgreSQL: %w", err)
 	}
@@ -173,7 +172,6 @@ func initSQLite(config *DatabaseConfig) (*Connection, error) {
 	db, err := gorm.Open(sqlite.Open(config.Name), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to SQLite: %w", err)
 	}

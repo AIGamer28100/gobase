@@ -2,7 +2,6 @@ package gobase
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -509,14 +508,14 @@ func TestPreload(t *testing.T) {
 	}
 
 	// Write to temporary file with proper name
-	tmpDir, err := ioutil.TempDir("", "gobase_test")
+	tmpDir, err := os.MkdirTemp("", "gobase_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tmpDir)
 
 	tmpFile := filepath.Join(tmpDir, "test_models.json")
-	err = ioutil.WriteFile(tmpFile, jsonData, 0644)
+	err = os.WriteFile(tmpFile, jsonData, 0o644)
 	if err != nil {
 		t.Fatalf("Failed to write test data: %v", err)
 	}
@@ -575,14 +574,14 @@ func TestPreloadDuplicatePrevention(t *testing.T) {
 	}
 
 	// Write to temporary file with proper name
-	tmpDir, err := ioutil.TempDir("", "gobase_test")
+	tmpDir, err := os.MkdirTemp("", "gobase_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tmpDir)
 
 	tmpFile := filepath.Join(tmpDir, "test_models.json")
-	err = ioutil.WriteFile(tmpFile, jsonData, 0644)
+	err = os.WriteFile(tmpFile, jsonData, 0o644)
 	if err != nil {
 		t.Fatalf("Failed to write test data: %v", err)
 	}
