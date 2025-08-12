@@ -1,13 +1,19 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"log"
 	"os"
+	"strings"
+	"syscall"
 
 	"github.com/AIGamer28100/gobase"
+	"golang.org/x/term"
 )
+
+const version = "1.0.0"
 
 func main() {
 	// Define command-line flags
@@ -19,13 +25,19 @@ func main() {
 		email              = flag.String("email", "", "Email for the superuser")
 		password           = flag.String("password", "", "Password for the superuser (if not provided, will be prompted)")
 		jsonFiles          = flag.String("files", "", "Comma-separated list of JSON files for preloading")
-		version            = flag.Bool("version", false, "Show version information")
+		versionFlag        = flag.Bool("version", false, "Show version information")
 	)
 	flag.Parse()
 
-	if *version {
-		fmt.Println("GoBase CLI v1.0.0")
+	if *versionFlag {
+		fmt.Printf("GoBase CLI v%s\n", version)
 		fmt.Println("A Django-inspired ORM and database toolkit for Go")
+		return
+	}
+
+	// If no commands are provided, show help
+	if !*migrateCmd && !*createSuperuserCmd && !*preloadCmd {
+		printHelp()
 		return
 	}
 
@@ -51,30 +63,39 @@ func main() {
 	// Handle commands
 	if *migrateCmd {
 		handleMigrate(accessor)
-		return
 	}
 
 	if *createSuperuserCmd {
 		handleCreateSuperuser(accessor, *username, *email, *password)
-		return
 	}
 
 	if *preloadCmd {
 		handlePreload(accessor, *jsonFiles)
-		return
 	}
-
-	// If no specific command, show usage
-	showUsage()
 }
 
-func showUsage() {
+func printHelp() {
+	fmt.Println("GoBase CLI - Database management tool")
 	fmt.Println()
-	fmt.Println("Available commands:")
+	fmt.Println("Usage:")
+	fmt.Println("  gobase [command] [options]")
+	fmt.Println()
+	fmt.Println("Commands:")
 	fmt.Println("  -migrate              Run database migration")
 	fmt.Println("  -createsuperuser      Create a superuser")
 	fmt.Println("  -preload              Preload data from JSON files")
 	fmt.Println("  -version              Show version information")
+	fmt.Println()
+	fmt.Println("Options:")
+	fmt.Println("  -username string      Username for the superuser")
+	fmt.Println("  -email string         Email for the superuser")
+	fmt.Println("  -password string      Password for the superuser")
+	fmt.Println("  -files string         Comma-separated list of JSON files")
+	fmt.Println()
+	fmt.Println("Examples:")
+	fmt.Println("  gobase -migrate")
+	fmt.Println("  gobase -createsuperuser -username admin -email admin@example.com")
+	fmt.Println("  gobase -preload -files articles.json,users.json")
 	fmt.Println()
 	fmt.Println("Use -help for detailed flag information")
 }
@@ -100,20 +121,17 @@ func handleCreateSuperuser(accessor *gobase.Accessor, username, email, password 
 
 	// Get username if not provided
 	if username == "" {
-		fmt.Print("Username: ")
-		fmt.Scanln(&username)
+		username = promptInput("Username: ")
 	}
 
 	// Get email if not provided
 	if email == "" {
-		fmt.Print("Email: ")
-		fmt.Scanln(&email)
+		email = promptInput("Email: ")
 	}
 
 	// Get password if not provided
 	if password == "" {
-		fmt.Print("Password: ")
-		fmt.Scanln(&password)
+		password = promptPassword("Password: ")
 	}
 
 	// Create superuser
@@ -134,18 +152,44 @@ func handlePreload(accessor *gobase.Accessor, files string) {
 		log.Fatal("No files specified. Use -files flag to specify JSON files")
 	}
 
-	// For simplicity, we'll require the user to define their own model registry
-	// in their application. This CLI version will show an example.
-	fmt.Println("Note: This CLI tool requires you to define model registries in your application.")
-	fmt.Println("Please use the gobase package directly in your Go application for preloading.")
-	fmt.Println()
-	fmt.Println("Example usage in your Go code:")
-	fmt.Println(`
-modelRegistry := map[string]interface{}{
-    "users": &YourUserModel{},
-    "articles": &YourArticleModel{},
+	fileList := strings.Split(files, ",")
+	for i, file := range fileList {
+		fileList[i] = strings.TrimSpace(file)
+	}
+
+	// Create a basic model registry for common models
+	modelRegistry := map[string]interface{}{
+		"users": &gobase.User{},
+		"articles": &struct {
+			gobase.BaseModel
+			Title   string `json:"title"`
+			Content string `json:"content"`
+			Author  string `json:"author"`
+			Status  string `json:"status"`
+		}{},
+	}
+
+	err := accessor.Preload(modelRegistry, fileList...)
+	if err != nil {
+		log.Fatalf("Preload failed: %v", err)
+	}
+
+	fmt.Printf("✓ Successfully preloaded data from %d files\n", len(fileList))
 }
 
-err := accessor.Preload(modelRegistry, "data.json")
-`)
+func promptInput(prompt string) string {
+	fmt.Print(prompt)
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	return strings.TrimSpace(input)
+}
+
+func promptPassword(prompt string) string {
+	fmt.Print(prompt)
+	bytePassword, err := term.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		log.Fatalf("Failed to read password: %v", err)
+	}
+	fmt.Println()
+	return string(bytePassword)
 }
