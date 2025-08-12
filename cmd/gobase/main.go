@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/hari-16245/gobase"
+	"github.com/AIGamer28100/gobase"
 )
 
 func main() {
