@@ -13,8 +13,6 @@ import (
 	"golang.org/x/term"
 )
 
-const version = "1.0.0"
-
 func main() {
 	// Define command-line flags
 	var (
@@ -30,8 +28,9 @@ func main() {
 	flag.Parse()
 
 	if *versionFlag {
-		fmt.Printf("GoBase CLI v%s\n", version)
-		fmt.Println("A Django-inspired ORM and database toolkit for Go")
+		fmt.Println(getVersionInfo())
+		fmt.Println("Build Date:", BuildDate)
+		fmt.Println("Git Commit:", GitCommit)
 		return
 	}
 

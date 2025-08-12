@@ -72,7 +72,11 @@ jobs:
         go-version: '1.23.x'
 
     - name: Build CLI tool
-      run: go build -v -o gobase-cli ./cmd/gobase
+      run: |
+        BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        GIT_COMMIT=${GITHUB_SHA::8}
+        LDFLAGS="-X main.BuildDate=$BUILD_DATE -X main.GitCommit=$GIT_COMMIT"
+        go build -v -ldflags "$LDFLAGS" -o gobase-cli ./cmd/gobase
 
     - name: Test CLI version
       run: ./gobase-cli -version
