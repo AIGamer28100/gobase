@@ -239,6 +239,72 @@ go test -v
 - **PostgreSQL**: Production-ready relational database
 - **MongoDB**: Document database support (coming soon)
 
+## Development
+
+### Setup Development Environment
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AIGamer28100/gobase.git
+cd gobase
+```
+
+2. Install development dependencies:
+```bash
+go mod download
+```
+
+3. Install Git hooks for code quality (recommended):
+```bash
+make install-hooks
+```
+
+The Git hooks will automatically run before each commit to ensure:
+- ✅ Go modules are in sync
+- ✅ Code passes `go vet`
+- ✅ All tests pass
+- ✅ Code passes linting (golangci-lint)
+- ✅ Code passes security scan (gosec)
+- ✅ No binary files are committed
+- ✅ Code is properly formatted
+
+### Development Commands
+
+```bash
+# Build the project
+make build
+
+# Run tests
+make test
+
+# Run linter
+make lint
+
+# Run security scan
+make security
+
+# Run all checks (like CI)
+make test lint security
+
+# Install Git hooks
+make install-hooks
+
+# Clean build artifacts
+make clean
+```
+
+### Manual Hook Installation
+
+If you prefer to install hooks manually:
+```bash
+./scripts/install-hooks.sh
+```
+
+To bypass hooks for a commit (not recommended):
+```bash
+git commit --no-verify
+```
+
 ## Contributing
 
 1. Fork the repository

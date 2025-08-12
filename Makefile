@@ -70,6 +70,16 @@ lint: ## Run linter
 	golangci-lint run
 	@echo "✅ Linting completed"
 
+security: ## Run security scan
+	@echo "Running security scan..."
+	gosec ./...
+	@echo "✅ Security scan completed"
+
+install-hooks: ## Install Git pre-commit hooks
+	@echo "Installing Git hooks..."
+	@./scripts/install-hooks.sh
+	@echo "✅ Git hooks installed"
+
 # Version management commands (similar to poetry)
 version: ## Show current version
 	@echo "Current version: v$(VERSION)"
