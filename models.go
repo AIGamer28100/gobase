@@ -1,3 +1,58 @@
+// Package gobase provides a Django-inspired ORM library for Go that makes database operations simple and elegant.
+//
+// GoBase is designed with Django ORM patterns in mind, offering a familiar interface for developers
+// coming from Python/Django while maintaining Go's type safety and performance characteristics.
+//
+// Key Features:
+//   - Multi-database support (SQLite, PostgreSQL, MongoDB planned)
+//   - Django-inspired model patterns with BaseModel
+//   - Automatic migrations and schema management
+//   - Built-in user management with authentication
+//   - Security-first design with input validation
+//   - Comprehensive test coverage
+//
+// Basic Usage:
+//
+//	// Initialize database connection
+//	config := &gobase.DatabaseConfig{
+//		Type: "sqlite",
+//		Name: "example.db",
+//	}
+//	conn, err := gobase.InitDBWithConfig(config)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	defer conn.Close()
+//
+//	// Create accessor for database operations
+//	accessor := gobase.NewAccessor(conn)
+//
+//	// Define your model
+//	type Article struct {
+//		gobase.BaseModel
+//		Title   string `json:"title"`
+//		Content string `json:"content"`
+//		Author  string `json:"author"`
+//	}
+//
+//	// Migrate the database
+//	err = accessor.Migrate(&Article{})
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	// Create a new article
+//	article := &Article{
+//		Title:   "Hello GoBase",
+//		Content: "This is my first article",
+//		Author:  "John Doe",
+//	}
+//	err = accessor.Create(article)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+// For more examples and documentation, visit: https://github.com/AIGamer28100/gobase
 package gobase
 
 import (
