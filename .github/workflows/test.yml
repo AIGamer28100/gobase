@@ -44,9 +44,12 @@ jobs:
       run: go vet ./...
 
     - name: Run tests
-      run: go test -v -race -coverprofile=coverage.out ./...
+      shell: bash
+      run: go test -v -race -coverprofile coverage.out ./...
 
     - name: Check test coverage
+      if: matrix.os == 'ubuntu-latest' && matrix.go-version == '1.23.x'
+      shell: bash
       run: go tool cover -func=coverage.out
 
     - name: Upload coverage to Codecov
@@ -56,6 +59,7 @@ jobs:
         file: ./coverage.out
         flags: unittests
         name: codecov-umbrella
+        fail_ci_if_error: false
 
   build:
     name: Build CLI
