@@ -2,6 +2,11 @@
 
 GoBase is a powerful, Django-inspired ORM library for Go that provides elegant database operations with automatic migrations, user management, and CLI tools.
 
+[![go report card](https://goreportcard.com/badge/github.com/AIGamer28100/gobase "go report card")](https://goreportcard.com/report/github.com/AIGamer28100/gobase)
+[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+<!-- [![test status](https://github.com/AIGamer28100/gobase/workflows/tests/badge.svg?branch=main "test status")](https://github.com/AIGamer28100/gobase/actions) -->
+<!-- [![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/gorm.io/gorm?tab=doc) -->
+
 ## Features
 
 - **Django-style CRUD Operations**: Create, Get, All, Filter, Update, Delete
@@ -16,7 +21,7 @@ GoBase is a powerful, Django-inspired ORM library for Go that provides elegant d
 ## Installation
 
 ```bash
-go get github.com/hari-16245/gobase
+go get github.com/AIGamer28100/gobase
 ```
 
 ## Quick Start
@@ -28,7 +33,7 @@ package main
 
 import (
     "log"
-    "github.com/hari-16245/gobase"
+    "github.com/AIGamer28100/gobase"
 )
 
 // Define your model
@@ -145,7 +150,7 @@ GoBase provides a powerful CLI tool for common database operations.
 ### Installation
 
 ```bash
-go install github.com/hari-16245/gobase/cmd/gobase@latest
+go install github.com/AIGamer28100/gobase/cmd/gobase@latest
 ```
 
 ### Usage
