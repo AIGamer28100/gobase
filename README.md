@@ -4,7 +4,7 @@ GoBase is a powerful, Django-inspired ORM library for Go that provides elegant d
 
 [![go report card](https://goreportcard.com/badge/github.com/AIGamer28100/gobase "go report card")](https://goreportcard.com/report/github.com/AIGamer28100/gobase)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/AIGamer28100/gobase/workflows/Tests/badge.svg?branch=main "test status")](https://github.com/AIGamer28100/gobase/actions)
+[![Tests](https://github.com/AIGamer28100/gobase/actions/workflows/test.yml/badge.svg?branch=main "test status")](https://github.com/AIGamer28100/gobase/actions)
 [![Go Reference](https://pkg.go.dev/badge/github.com/AIGamer28100/gobase.svg)](https://pkg.go.dev/github.com/AIGamer28100/gobase)
 
 ## Features
@@ -316,7 +316,3 @@ git commit --no-verify
 ## License
 
 MIT License - see LICENSE file for details.
-
-## Examples
-
-Check the [example application](../gobase-example/) for a complete implementation showing all features.
